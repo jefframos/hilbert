@@ -5,6 +5,7 @@ using UnityEngine;
 public class MoveTest : MonoBehaviour {
     int dir = 1;
     float timer = 0;
+    public float spd = 0.0001f;
     private Vector2 velocity;
 
     // Use this for initialization
@@ -14,8 +15,8 @@ public class MoveTest : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        
 
+        print("Q");
         timer -= (1f / 2) * Time.unscaledDeltaTime;
         //print(Time.fixedDeltaTime);
 
@@ -25,10 +26,10 @@ public class MoveTest : MonoBehaviour {
             dir = -dir;
             timer = 1.5f;
         }
-        velocity = new Vector2(dir * 0.0001f, 0);
+        velocity = new Vector2(dir * spd, 0);
 
         Vector2 nextPos = transform.position;
-        nextPos += velocity;// * Time.unscaledDeltaTime;
+        nextPos.x += velocity.x;// * Time.unscaledDeltaTime;
         transform.position = nextPos;
     }
 }

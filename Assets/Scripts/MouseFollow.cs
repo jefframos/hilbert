@@ -12,12 +12,12 @@ public class MouseFollow : MonoBehaviour {
     //public float rotationSpeed = 0.1f;
     private Vector2 velocity;
 
-    public TimeManager TimeManager;
+    //public TimeManager TimeManager;
     // Use this for initialization
     void Start()
     {
         velocity = new Vector2();
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
     }
 
     // Update is called once per frame
@@ -27,13 +27,20 @@ public class MouseFollow : MonoBehaviour {
 
         if (touched)
         {
-            TimeManager.DoNormalSpeed();
+            //TimeManager.DoNormalSpeed();
         }
         else
         {
-            TimeManager.DoSlowmotion();
+           // TimeManager.DoSlowmotion();
         }
-        print(velocity.x);
+        CastRayToWorld();
+        //print(velocity.x);
+    }
+    void CastRayToWorld()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Vector3 point = ray.origin + (ray.direction * Camera.main.transform.position.z);
+        
     }
     void FixedUpdate()
     {
@@ -43,7 +50,11 @@ public class MouseFollow : MonoBehaviour {
         {
 
             mousePosition = Input.mousePosition;
-            mousePosition = Camera.main.ScreenToWorldPoint(mousePosition);
+
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Vector3 point  = ray.origin + (ray.direction * Camera.main.transform.position.z);
+
+            mousePosition = point;//Camera.main.ScreenToWorldPoint(mousePosition);
 
             if (Vector2.Distance(mousePosition, transform.position) < 0.5)
             {
@@ -54,15 +65,19 @@ public class MouseFollow : MonoBehaviour {
         if (touched)
         {           
 
-            float tan = Mathf.Atan2(mousePosition.y - transform.position.y, mousePosition.x - transform.position.x);
+            float tan = Mathf.Atan2(mousePosition.z - transform.position.z, mousePosition.x - transform.position.x);
 
-            Vector2 nextVel = new Vector2()
+            Vector3 nextVel = new Vector3()
             {
                 x = Mathf.Cos(tan) * moveSpeed,
-                y = Mathf.Sin(tan) * moveSpeed
+                z = Mathf.Sin(tan) * moveSpeed
             };
 
             //moveSpeed = Mathf.Lerp(moveSpeed, maxSpeed, acc);
+
+
+            Debug.Log("World point " + nextVel.x +" - "+ nextVel.y + " - " + nextVel.z);
+
             velocity = nextVel;
 
             
@@ -88,10 +103,10 @@ public class MouseFollow : MonoBehaviour {
         }
 
         
-        
-        Vector2 nextPos = transform.position;
-        nextPos += velocity;// * Time.deltaTime;
-        transform.position = nextPos;
+
+        //Vector2 nextPos = transform.position;
+        //nextPos += velocity;// * Time.deltaTime;
+        //transform.position = nextPos;
 
     }
 }
