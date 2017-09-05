@@ -74,7 +74,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1750352796733408
 GameObject:
   m_ObjectHideFlags: 0
@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 135943642810047236}
   - component: {fileID: 23206756675892916}
   - component: {fileID: 114503948926691346}
+  - component: {fileID: 54546206768280518}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -185,8 +186,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1750352796733408}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.657, y: 0.586, z: 0}
-  m_LocalScale: {x: 0.37316972, y: 0.37316972, z: 0.37316972}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4679787087097344}
   - {fileID: 4808545755706448}
@@ -232,6 +233,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1750352796733408}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &54546206768280518
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1750352796733408}
+  serializedVersion: 2
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!96 &96476789052604354
 TrailRenderer:
   serializedVersion: 2
@@ -333,7 +349,7 @@ Light:
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -384,7 +400,7 @@ Light:
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 0.15
-  m_Range: 10
+  m_Range: 1
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -434,10 +450,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7928f9412a8f2cf4cb332480d035d252, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lifeSpan: 5
+  lifeSpan: 3
+  secSpan: 2
+  intensity: 1.5
   toKill: 0
   speed: 0.15
   Light: {fileID: 108347531362666836}
+  ParticleEmitter: {fileID: 198020089531989086}
 --- !u!135 &135943642810047236
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -445,7 +464,7 @@ SphereCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1750352796733408}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
@@ -457,9 +476,9 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1414647267485450}
   serializedVersion: 5
-  lengthInSec: 0.1
+  lengthInSec: 3
   simulationSpeed: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -509,7 +528,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: 1970687794
+  randomSeed: 822495630
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -2948,12 +2967,12 @@ ParticleSystem:
     light: {fileID: 108682285155779302}
     randomDistribution: 0
     color: 0
-    range: 0
+    range: 1
     intensity: 1
     rangeCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2.66
+      scalar: 60
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -2994,7 +3013,7 @@ ParticleSystem:
     intensityCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2

@@ -23,7 +23,7 @@ public class BulletShoot : MonoBehaviour {
     }
 	void FixedUpdate ()
     {
-        print("UPDATE");
+        //print("UPDATE");
         for (int i = bulletList.Count - 1; i >=0 ; i--)
         {
             if (bulletList[i].toKill)
