@@ -4,10 +4,15 @@ using UnityEngine;
 
 public class TransformUtils
 {
-	public static void InstantiateAndAdd(GameObject prefab, Transform parent)
+	public static GameObject InstantiateAndAdd(GameObject prefab, Transform parent = null)
     {
         GameObject go = GameObject.Instantiate(prefab, new Vector3(), Quaternion.identity);
         Transform t = go.transform;
-        t.SetParent(parent, false);
+        if(parent != null)
+        {
+            t.SetParent(parent, false);
+
+        }
+        return go;
     }
 }

@@ -11,6 +11,9 @@ public class TimeManager : MonoBehaviour
     {
         //return;
         dbg.text = Time.timeScale.ToString();
+
+        Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
+        Time.fixedDeltaTime = Time.timeScale * .02f;
     }
 
     public void DoNormalSpeed()
@@ -22,7 +25,6 @@ public class TimeManager : MonoBehaviour
     public void DoSlowmotion()
     {
         //return;
-        //print("SLOMO");
 
         Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
         float timeDecreese = (1f / slowdownLength) * Time.unscaledDeltaTime;
@@ -34,6 +36,10 @@ public class TimeManager : MonoBehaviour
         {
             Time.timeScale = 0;
         }
+
+        print(Time.timeScale);
+
+
         Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 1f);
         //Time.timeScale = slowdownFactor;
         Time.fixedDeltaTime = Time.timeScale * .02f;

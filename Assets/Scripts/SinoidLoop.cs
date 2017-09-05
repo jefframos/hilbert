@@ -21,7 +21,8 @@ public class SinoidLoop : MonoBehaviour {
         {
             if (RandonStart)
             {
-                Sin = new Vector3(UnityEngine.Random.Range(0, 1), UnityEngine.Random.Range(0, 1), UnityEngine.Random.Range(0, 1));
+                Sin = new Vector3(UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f));
+                print(Sin);
             }
 
             startPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
