@@ -8,11 +8,16 @@ public class BulletShoot : MonoBehaviour {
     private float timer = 0;
     public float BulletSpanTime = 3f;
     private List<Bullet> bulletList;
+    private List<Bullet> bulletPool;
     public Transform SpawnPoint;
-    public MoveToClickPoint player;
+    public PlayerController player;
+    private bool ableToShoot = false;
+   
 	// Use this for initialization
 	void Start () {
         bulletList = new List<Bullet>();
+        bulletPool = new List<Bullet>();
+        player = GetComponentInParent<PlayerController>();
         timer = BulletSpanTime;
     }
 
@@ -29,31 +34,54 @@ public class BulletShoot : MonoBehaviour {
             if (bulletList[i].toKill)
             {
                 //do something
-                Destroy(bulletList[i].gameObject);
+                bulletPool.Add(bulletList[i]);
+                bulletList[i].gameObject.SetActive(false);
                 bulletList.RemoveAt(i);
             }
         }
 
-        
-
-        if (player.Velocity != Vector3.zero)
+        if (timer > BulletSpanTime)
         {
-            if (timer > BulletSpanTime && player.Velocity != Vector3.zero)
-            {
-                timer = 0;
-                Shoot();
-            }
+            
+            ableToShoot = true;
+            //Shoot();
         }
     }
 
-    private void Shoot()
+    public void Shoot()
     {
-        print("SHOOT");
-        GameObject go = TransformUtils.InstantiateAndAdd(BulletPrefab);
-        go.transform.position = SpawnPoint.position;
-        Bullet bullet = go.GetComponent<Bullet>();
+        if (!ableToShoot)
+        {
+            return;
+        }
+        ableToShoot = false;
+        Bullet bullet;
+        if (bulletPool.Count > 0)
+        {
+            bullet = bulletPool[0];
+            bulletPool.RemoveAt(0);
+        }
+        else
+        {
+            GameObject go = TransformUtils.InstantiateAndAdd(BulletPrefab);
+            bullet = go.GetComponent<Bullet>();
+        }
+
+        bullet.transform.position = SpawnPoint.position;
+        Quaternion rot = transform.parent.parent.rotation;
+        Vector3 euler = rot.eulerAngles;
+        euler.y += 90;
+        rot.eulerAngles = euler;
+        bullet.transform.rotation = rot;// transform.parent.parent.rotation + Quaternion.Euler(new Vector3(0, 90, 0));
+
+        //bullet.SetDir(transform.forward);
+        bullet.CurrentStateType = player.CurrentStateType;
+        bullet.Reset();
+
+        bullet.gameObject.SetActive(true);
         bullet.SetDirection(transform.parent.rotation);
-        bullet.SetSpeed(player.Velocity);
+        //bullet.SetSpeed(player.Velocity);
         bulletList.Add(bullet);
+        timer = 0;
     }
 }

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-
+    public GameObject StarterLight;
 	// Use this for initialization
 	void Awake () {
+        StarterLight.SetActive(false);
         QualitySettings.vSyncCount = 0;  // VSync must be disabled
         Application.targetFrameRate = 60;
     }
