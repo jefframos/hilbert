@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.AI;
-
+using System;
 
 public class Patrol : MonoBehaviour
 {
@@ -41,16 +41,29 @@ public class Patrol : MonoBehaviour
 
     void Update()
     {
+        if (!agent.enabled)
+        {
+            return;
+        }
         if (Stop)
         {
-            agent.Stop();
+            agent.isStopped = true;
             return;
         }
         // Choose the next destination point when the agent gets
         // close to the current one.
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
         {
+            agent.isStopped = false;
             GotoNextPoint();
         }
+    }
+    internal void Enable()
+    {
+        //agent.enabled = true;
+    }
+    internal void Disable()
+    {
+        //agent.enabled = false;
     }
 }

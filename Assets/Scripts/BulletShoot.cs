@@ -48,7 +48,7 @@ public class BulletShoot : MonoBehaviour {
         }
     }
 
-    public void Shoot()
+    public void Shoot(ShootType ShootType)
     {
         if (!ableToShoot)
         {
@@ -66,7 +66,7 @@ public class BulletShoot : MonoBehaviour {
             GameObject go = TransformUtils.InstantiateAndAdd(BulletPrefab);
             bullet = go.GetComponent<Bullet>();
         }
-
+        bullet.SetType(ShootType);
         bullet.transform.position = SpawnPoint.position;
         Quaternion rot = transform.parent.parent.rotation;
         Vector3 euler = rot.eulerAngles;
@@ -80,6 +80,7 @@ public class BulletShoot : MonoBehaviour {
 
         bullet.gameObject.SetActive(true);
         bullet.SetDirection(transform.parent.rotation);
+        bullet.SetPlayer(player);
         //bullet.SetSpeed(player.Velocity);
         bulletList.Add(bullet);
         timer = 0;

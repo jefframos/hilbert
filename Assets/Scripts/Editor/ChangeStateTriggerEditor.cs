@@ -44,7 +44,7 @@ public class ChangeStateTriggerEditor : Editor
             {
                 for (int j = 0; j < stateTrigger.PilarMaterials.Length; j++)
                 {
-                    //stateTrigger.PilarMaterials[j].material = cData.TriggerWallMaterial;
+                    stateTrigger.PilarMaterials[j].material = cData.TriggerWallMaterial;
                 }
                 
                 ParticleSystem.MainModule settings = stateTrigger.ParticleSystem.main;

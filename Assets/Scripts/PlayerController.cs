@@ -28,6 +28,14 @@ public class PlayerController : MonoBehaviour, IPointerDownHandler
     public Animator Animator;
     int tapCount = 0;
     float touchCounter;
+
+    public ShootType ShootType = ShootType.STANDARD;
+
+    internal void SetBulletType(ShootType type)
+    {
+        ShootType = type;
+    }
+
     public NavMeshAgent Agent;
     public BulletShoot BulletShot;
 
@@ -35,16 +43,37 @@ public class PlayerController : MonoBehaviour, IPointerDownHandler
 
     public FireStateType CurrentStateType = FireStateType.BLUE;
 
+    bool isTeleporting;
+
     public IndicatorMarker Indicator;
+
+    public Vector3 SpawnPoint { get; internal set; }
+
     void Start()
     {
-        Lights = GetComponentsInChildren<Light>();
-        Reset();
+        
+        //Reset();
     }
 
+    public void Respawn()
+    {
+        transform.position = SpawnPoint;
+
+        Agent.destination = SpawnPoint;
+        Agent.nextPosition = SpawnPoint;
+        //Agent.SetDestination(SpawnPoint);
+        Agent.isStopped = true;
+
+        UpdateStateContainers();
+    }
     public void Reset()
     {
+        transform.position = SpawnPoint;
+        Lights = GetComponentsInChildren<Light>();
         UpdateStateContainers();
+
+        Agent.gameObject.SetActive(true);
+        Agent.enabled = true;
         
     }
 
@@ -54,8 +83,6 @@ public class PlayerController : MonoBehaviour, IPointerDownHandler
         {
             if (StatesData[i].FireStateType == CurrentStateType)
             {
-                print(CurrentStateType);
-                print(Lights.Length);
                 CurrentStateData = StatesData[i];
 
 
@@ -120,7 +147,7 @@ public class PlayerController : MonoBehaviour, IPointerDownHandler
             touchCounter = 0;
         }
 
-        if (Agent)
+        if (Agent != null && Agent.enabled)
         {
 
             if (!Agent.pathPending)
@@ -134,6 +161,16 @@ public class PlayerController : MonoBehaviour, IPointerDownHandler
             }
 
         }
+    }
+
+    internal void Teleport(Vector3 position, FireStateType stateType)
+    {
+        transform.position = position;
+
+        Agent.SetDestination(position);
+
+        CurrentStateType = stateType;
+        UpdateStateContainers();
     }
 
     private void Rotate()
@@ -153,15 +190,21 @@ public class PlayerController : MonoBehaviour, IPointerDownHandler
     {
 
         Rotate();
-        BulletShot.Shoot();
+        BulletShot.Shoot(ShootType);
     }
 
     private void GoToPosition()
     {
+        if(Input.mousePosition != null && Input.mousePosition.y > Screen.height * 0.85f)
+        {
+            return;
+        }
         RaycastHit hit;
 
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
         {
+            Agent.isStopped = false;
+            
             Agent.SetDestination(hit.point);
         }
     }
@@ -210,16 +253,18 @@ public class PlayerController : MonoBehaviour, IPointerDownHandler
         {
             print("Enemy");
             StandardEnemy standardEnemy = item.GetComponent<StandardEnemy>();
-            if (standardEnemy != null)
+            if (standardEnemy != null && standardEnemy.isAlive)
             {
-                if (standardEnemy.Type == CurrentStateType)
-                {
-                    standardEnemy.Hit();
-                }
-                else
-                {
-                    //Explode();
-                }
+                CurrentStateType = standardEnemy.CurrentStateType;
+                Respawn();
+                //if (standardEnemy.CurrentStateType == CurrentStateType)
+                //{
+                //    standardEnemy.Hit();
+                //}
+                //else
+                //{
+                //    //Explode();
+                //}
                 //Explode();
 
             }

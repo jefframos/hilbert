@@ -45,6 +45,11 @@ public class Bullet : MonoBehaviour {
     public ParticleSystem TrailParticle;
 
     public FireStateType CurrentStateType;
+    public ShootType ShootType;
+
+    PlayerController player;
+
+    public Collider[] Colliders { get; private set; }
 
     public void Update()
     {
@@ -57,6 +62,16 @@ public class Bullet : MonoBehaviour {
     public void Reset()
     {
         //CurrentStateType = FireStateType.BLUE;
+
+        if (Colliders == null)
+        {
+            Colliders = GetComponentsInChildren<Collider>();
+        }
+        for (int i = 0; i < Colliders.Length; i++)
+        {
+            Colliders[i].enabled = true;
+        }
+
         UpdateStateContainers();
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = false;
@@ -77,6 +92,12 @@ public class Bullet : MonoBehaviour {
         CurrentStateType = StatesData[currentState].FireStateType;
         UpdateStateContainers();
     }
+
+    internal void SetType(ShootType shootType)
+    {
+        ShootType = shootType;
+    }
+
     private void UpdateStateContainers()
     {
         DefaultContainer.SetActive(true);
@@ -98,13 +119,22 @@ public class Bullet : MonoBehaviour {
         }
     }
 
+    internal void SetPlayer(PlayerController _player)
+    {
+        player = _player;
+    }
+
     void OnCollisionEnter(Collision item)
     {
         string layerName = LayerMask.LayerToName(item.gameObject.layer);
 
         if (layerName == "Environment")
         {
-
+            if(ShootType == ShootType.TELEPORTER)
+            {
+                Explode();
+                player.Teleport(transform.position, CurrentStateType);
+            }
 
             currentBounce--;
 
@@ -116,8 +146,7 @@ public class Bullet : MonoBehaviour {
             {
                 //ChangeState();
             }
-
-            print("OnCollisionEnter" + currentBounce);
+            
 
         }
 
@@ -125,7 +154,14 @@ public class Bullet : MonoBehaviour {
 
     private void Explode()
     {
-
+        if (Colliders == null)
+        {
+            Colliders = GetComponentsInChildren<Collider>();
+        }
+        for (int i = 0; i < Colliders.Length; i++)
+        {
+            Colliders[i].enabled = false;
+        }
         ExplosionParticles = ExplosionContainer.GetComponentsInChildren<ParticleSystem>();
 
         for (int j = 0; j < ExplosionParticles.Length; j++)
@@ -168,7 +204,7 @@ public class Bullet : MonoBehaviour {
             StandardEnemy standardEnemy = item.GetComponent<StandardEnemy>();
             if (standardEnemy != null)
             {
-                if(standardEnemy.Type == CurrentStateType)
+                if(standardEnemy.CurrentStateType == CurrentStateType)
                 {
                     standardEnemy.Hit();
                 }

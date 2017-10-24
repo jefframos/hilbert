@@ -120,6 +120,7 @@ GameObject:
   - component: {fileID: 135943642810047236}
   - component: {fileID: 114503948926691346}
   - component: {fileID: 54546206768280518}
+  - component: {fileID: 135272200241914400}
   m_Layer: 14
   m_Name: Bullet
   m_TagString: Untagged
@@ -659,6 +660,7 @@ MonoBehaviour:
   ExplosionParticles: []
   TrailParticle: {fileID: 198020089531989086}
   CurrentStateType: 1
+  ShootType: 0
 --- !u!114 &114947577613529454
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -671,6 +673,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionForce: 20
+--- !u!135 &135272200241914400
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1750352796733408}
+  m_Material: {fileID: 13400000, guid: 9f93f63d068b08c459038c40fce897d8, type: 2}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.56
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &135943642810047236
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -681,7 +695,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.62
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!198 &198020089531989086
 ParticleSystem:
